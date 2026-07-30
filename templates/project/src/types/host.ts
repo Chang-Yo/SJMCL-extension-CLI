@@ -26,6 +26,7 @@ export interface ExtensionInfo {
   name: string;
   description?: string | null;
   author?: string | null;
+  repoUrl?: string | null;
   version?: string | null;
   minimalLauncherVersion?: string | null;
   path: string;

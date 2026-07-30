@@ -383,6 +383,13 @@ export async function scaffoldProject({
     defaultValue: getDefaultAuthor(),
     emptyValueLabel: EMPTY_OPTIONAL_PLACEHOLDER,
   });
+  const authorSlug = (author.trim() || getDefaultAuthor()).replace(/\s+/g, "-");
+  const extensionNameSlug = name.trim().replace(/\s+/g, "-");
+  const defaultRepoUrl = `https://github.com/${authorSlug}/${extensionNameSlug}`;
+  const repoUrl = await prompt.text("Extension repo URL (Optional)", {
+    defaultValue: defaultRepoUrl,
+    emptyValueLabel: EMPTY_OPTIONAL_PLACEHOLDER,
+  });
   const version = await prompt.text("Extension version (Optional)", {
     defaultValue: "0.1.0",
     emptyValueLabel: EMPTY_OPTIONAL_PLACEHOLDER,
@@ -398,6 +405,7 @@ export async function scaffoldProject({
   );
   const normalizedDescription = description.trim();
   const normalizedAuthor = author.trim();
+  const normalizedRepoUrl = repoUrl.trim();
   const normalizedVersion = version.trim();
   const normalizedMinimalLauncherVersion = minimalLauncherVersion.trim();
   const packageVersion = normalizedVersion || "0.1.0";
@@ -413,6 +421,7 @@ export async function scaffoldProject({
     name,
     description: normalizedDescription,
     author: normalizedAuthor,
+    repoUrl: normalizedRepoUrl,
     version: normalizedVersion,
     minimalLauncherVersion: normalizedMinimalLauncherVersion,
     packageVersion,
@@ -439,6 +448,9 @@ export async function scaffoldProject({
     AUTHOR: answers.author,
     AUTHOR_JSON: JSON.stringify(answers.author),
     OPTIONAL_AUTHOR_FIELD: buildOptionalJsonField("author", answers.author),
+    REPO_URL: answers.repoUrl,
+    REPO_URL_JSON: JSON.stringify(answers.repoUrl),
+    OPTIONAL_REPO_URL_FIELD: buildOptionalJsonField("repoUrl", answers.repoUrl),
     VERSION: answers.packageVersion,
     VERSION_JSON: JSON.stringify(answers.packageVersion),
     OPTIONAL_VERSION_FIELD: buildOptionalJsonField("version", answers.version),
